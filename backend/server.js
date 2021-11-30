@@ -18,10 +18,11 @@ app.listen(5000, () => {
     console.log('Server is Running')
 });
 
-const pass = '124698987'
-const getHashed = async (psswd) => {
-    const salt = await bcrypt.genSalt()
-    const hashed = await bcrypt.hash(psswd, salt)
-    console.log(hashed)
+const firstuser = async () => {
+    const pass = '1234';
+    const salt = await bcrypt.genSalt();
+    const hashed = await bcrypt.hash(pass, salt);
+    console.log(hashed);
+
 }
-getHashed(pass);
+firstuser()
