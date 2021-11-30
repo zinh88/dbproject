@@ -1,6 +1,7 @@
 CREATE DATABASE ldf;
 
 CREATE USER ldfadmin;
+
 GRANT ALL PRIVILEGES ON DATABASE ldf to ldfadmin;
 
 CREATE TABLE members (
