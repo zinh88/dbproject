@@ -1,7 +1,7 @@
 const pool = require('../config/db')
 const bcrypt = require('bcrypt')
 
-pool.query('SELECT * FROM members WHERE email = \'23100008@lums.edu.pk\'', (err, result) => {
+pool.query(`SELECT * FROM members WHERE email = \'23100008@lums.edu.pk\'`, (err, result) => {
     //if (err) throw err;
     //else console.log(result)
     const pass = result.rows[0].hashedpassword;
