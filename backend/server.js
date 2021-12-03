@@ -11,7 +11,7 @@ app.use(cors({
     origin: '*'
 }));
 
-app.use('/api/user', authRoute);
+app.use('/api/auth', authRoute);
 
 app.listen(5000, () => {
     console.log('Server is Running')
