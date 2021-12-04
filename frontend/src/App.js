@@ -1,15 +1,15 @@
-import Singnup from './components/signup'
-import Login from './components/login'
+import Signup from './components/Signup'
+import Login from './components/Login'
 import {BrowserRouter as Router , Route} from 'react-router-dom';
 import {Switch} from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
+    <div>
     <Router>
         <Switch>
           <Route path="/" exact component={Login}/>
-          <Route path="/signup" exact component={Singnup}/>
+          <Route path="/signup" exact component={Signup}/>
         </Switch>
     </Router>
     </div>

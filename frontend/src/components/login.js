@@ -22,7 +22,8 @@ const Login = () =>
     const isvalidate=(e) =>
     {
         //CHECK Weather the user exist or not//BACKEND
-        axios.post(`${url}/api/user/login`,log)
+
+        axios.post(`${url}/api/auth/login`,log)
         .then((response)=>{
             console.log(response);
         });   
@@ -52,14 +53,14 @@ const Login = () =>
 return(
 <>
 
-<link rel="stylesheet" href="sign.css"></link>
+<link rel="stylesheet" href="./styles/sign.css"></link>
     <div style={{display: 'flex',  justifyContent:'center'}}>
         <b>Lums Discussion Forum</b><br/><br/>
         </div>
         <div style={{display: 'flex',  justifyContent:'center',  height: '100vh'}}>
         <form action="" onSubmit={HandleSubmit}>
         {/*EMAIL */}
-        <b>LUMSEmail:</b> 
+        <b>LUMS Email:</b> 
         <input type="text" required autoComplete="OFF" placeholder="2xxxxxxx@lums.edu.pk"  
         value={log.mail}
         onChange ={Handleinput}
@@ -67,7 +68,7 @@ return(
         />
         <br/>
          {/*Password */}
-         <b>Password :      </b> 
+         <b>Password:      </b> 
         <input type="password" required autoComplete="OFF" placeholder="password" 
         value={log.pass}
         onChange ={Handleinput}
@@ -82,7 +83,7 @@ return(
          </Link>
          <br/>
  <button type="button" className="cancelbtn">Cancel</button>
-      <button type="submit" className="signupbtn">LOG IN</button>
+      <button type="submit" className="signupbtn">Log In</button>
       </form>
       </div>
 

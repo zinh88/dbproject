@@ -1,14 +1,15 @@
-import { useImperativeHandle, useState } from "react";
+import axios from "axios";
+import { useState } from "react";
 import {Link} from 'react-router-dom';
-import './signup.css';
+import './styles/signup.css';
 //This Function WIll be returned/rendered From the file whenever, it is routed
 const Signup =() =>{
-
+const url = 'http://10.130.17.38:5000';
 //This call will contain information of the users when they signup
 const [reginfo,setreginfo]=useState({
 mail:'',
 name:'',
-psd:'',
+pass:'',
 rpsd:'',
 });
 
@@ -18,6 +19,8 @@ perr:'',
 mailerr:'',
 pres:''
 });
+  
+const [message, setMessage] = useState('');
 
 //Handle input This function dynamically capture any value entered
 const Handleinput =(e) =>{
@@ -35,7 +38,7 @@ const isvalidate=(e)=>{
         {
             mailerr="The email is not valid";
         }
-    if(reginfo.psd!==reginfo.rpsd)
+    if(reginfo.pass!==reginfo.rpsd)
         {
             perr="The password do not match";
         }
@@ -52,6 +55,13 @@ const HandleSubmit = (e)=>{
         if(isvalidate(e))
         {
             //Forward IT
+            let perr='CHECK EMAIL';
+            let mailerr='';
+            let pres='';
+            axios.post(`${url}/api/auth/signup`,reginfo ).then((response)=>{
+                perr=response.data.message;
+                seterr({perr,mailerr,pres});
+            })
         };
     }
     catch
@@ -98,9 +108,9 @@ return (
             {/*Password */}
             <b>Password :</b> 
             <input type="password" required autoComplete="OFF" placeholder="password" 
-                value={reginfo.psd}
+                value={reginfo.pass}
                 onChange ={Handleinput}
-                name="psd"
+                name="pass"
             />
             <br/>
 
@@ -123,7 +133,8 @@ return (
 
             <button type="button" className="cancelbtn">Cancel</button>
             <button type="submit" className="signupbtn">Sign Up</button>
-        </form>
+        </form> 
+        <h>{message}</h>
     </div>
     </>
    
