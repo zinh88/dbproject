@@ -10,6 +10,10 @@ require('dotenv').config();
 
 const router = Router();
 
+const hostIP = process.env.HOST_IP;
+const serverPort = process.env.SERVER_PORT;
+const clientPort = process.env.CLIENT_PORT;
+
 router.post('/signup', validInfo ,async (req, res) => {    
     try {
         const email = req.body.mail;
@@ -37,7 +41,7 @@ router.post('/signup', validInfo ,async (req, res) => {
             { expiresIn: '1h' },
             (err, emailToken) => {
                 if (err) res.status(401).json({ message : "Registration Failed" })
-                const url = `http://10.130.17.38:5000/api/auth/confirm?token=${emailToken}`;
+                const url = `http://${hostIP}:${serverPort}/api/auth/confirm?token=${emailToken}`;
                 transporter.sendMail({
                     from: `"LDF" <${process.env.NODEMAILER_MAIL}>`,
                     to: `${email}`,
@@ -90,7 +94,7 @@ router.get('/confirm', async (req, res) => {
                 const email = decoded.email;
                 const hashedpassword = decoded.hashedpassword;
                 const name = decoded.name;
-                const loginurl = `http://10.130.17.38:3000/login`
+                const loginurl = `http://${hostIP}:${clientPort}/login`
     
                 pool.query(`INSERT INTO members VALUES (DEFAULT, $1, $2, $3)`, 
                 [email, hashedpassword, name],
