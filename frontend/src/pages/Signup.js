@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import './styles/signup.css';
 //This Function WIll be returned/rendered From the file whenever, it is routed
 const Signup =() =>{
-const url = 'http://10.130.17.38:5000';
 //This call will contain information of the users when they signup
 const [reginfo,setreginfo]=useState({
 mail:'',
@@ -58,7 +57,7 @@ const HandleSubmit = (e)=>{
             let perr='CHECK EMAIL';
             let mailerr='';
             let pres='';
-            axios.post(`${url}/api/auth/signup`,reginfo ).then((response)=>{
+            axios.post(`/api/auth/signup`,reginfo ).then((response)=>{
                 perr=response.data.message;
                 seterr({perr,mailerr,pres});
             })
@@ -73,68 +72,59 @@ return (
     <>
     {/*This part is for Ouput of login*/}
  {/*External Cascading Is imported */}
-    <link rel="stylesheet" href="sign.css"></link>
+    <link rel="stylesheet" href="./styles/sign.css"></link>
 
 {/* Making center box */}
-    <div style={{display: 'flex',  justifyContent:'center'}}>
-        <b>Lums Discussion Forum</b><br/><br/>
-    </div>
-
-    <div style={{display: 'flex',  justifyContent:'center',  height: '100vh'}}>
+<div style={{  paddingTop: '50px',  display: 'flex',  justifyContent:'center', height:'100'}}>
+        </div>
+    <div style={{ display: 'flex',  justifyContent:'center', height:'100%'}}>
         <form action="" onSubmit={HandleSubmit}>
  
             {/*EMAIL */}
-            <b>LUMSEmail:</b> 
-            <input type="text" required autoComplete="OFF" placeholder="2xxxxxxx@lums.edu.pk"  
+            <b>LUMS Email</b>
+            <input type="text" required autoComplete="OFF" 
                 value={reginfo.mail}
                 onChange ={Handleinput}
                 name="mail" 
+                style={{height:'50px'}}
             />
-
-            <div style={{color:"red", fontSize:12}} fonts>
-                {err.mailerr}
-            </div>
+            <br/>
             <br/>
 
             {/*NAME */}
-            <b>EnterName: </b> 
-            <input type="text" required autoComplete="OFF" placeholder=" Basit Rahim"  
+            <b>Display Name</b> 
+            <input type="text" required autoComplete="OFF"  
                 value={reginfo.name}
                 onChange ={Handleinput}
                 name="name"
+                style={{height:'50px'}}
             />
             <br/>
-
+            <br/>
             {/*Password */}
-            <b>Password :</b> 
-            <input type="password" required autoComplete="OFF" placeholder="password" 
+            <b>Password</b> 
+            <input type="password" required autoComplete="OFF"
                 value={reginfo.pass}
                 onChange ={Handleinput}
                 name="pass"
+                style={{height:'50px'}}
             />
             <br/>
-
+            <br/>
             {/*RE-ENTER */}
-            <b>Repeat :</b> 
-            <input type="password" required autoComplete="OFF" placeholder="password" 
+            <b>Re-Type Password</b> 
+            <input type="password" required autoComplete="OFF"
                 value={reginfo.rpsd}
                 onChange ={Handleinput}
                 name="rpsd"
+                style={{height:'50px'}}
             />
-            <div style={{color:"red", fontSize:12}} fonts>
-                {err.perr}
-            </div>
-
-            <Link to='/'>
-                <b>Have An Account</b>
-            </Link>
             <br/>
-
-
-            <button type="button" className="cancelbtn">Cancel</button>
-            <button type="submit" className="signupbtn">Sign Up</button>
+            <br/>
+            <button type="submit" className="loginbtn">Sign Up</button>
+            <Link to='/login' className="signuplink">Already Have An Account</Link>
         </form> 
-        <h>{message}</h>
+        <h1>{message}</h1>
     </div>
     </>
    

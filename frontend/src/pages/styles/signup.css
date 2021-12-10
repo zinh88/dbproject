@@ -1,10 +1,9 @@
 * {box-sizing: border-box}
-
   input[type=text],input[type=password] {
-  height: 10%;
+  height: 20%;
   width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
+  padding: 20px;
+  margin: 0px 0 0px 0;
   display: inline-block;
   border: none;
   background: #f1f1f1;
@@ -20,14 +19,15 @@ hr {
   margin-bottom: 25px;
 }
 
-button {
-  background-color: #04AA6D;
+button, .signuplink {
+  text-align: center;
+  background-color: #000;
   color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
+  padding: 10px 20px;
+  margin: 0px 0px;
   border: none;
   cursor: pointer;
-  width: 50%;
+  width: 100%;
   opacity: 0.9;
 }
 
@@ -35,14 +35,19 @@ button:hover {
   opacity:1;
 }
 
-.cancelbtn {
-  padding: 14px 20px;
-  background-color: #f44336;
+.loginbtn {
+  float: left;
+  width: 100%;
+  font-size:100%;
 }
 
-.cancelbtn, .signupbtn {
+.signuplink {
+  font-size: 100%;
+  text-decoration: none;
   float: left;
-  width: 50%;
+  width: 100%;
+  background-color: #8a8a8a57;
+  color: #000000;
 }
 
 .container {

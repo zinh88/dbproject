@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+axios.defaults.baseURL = 'http://10.130.17.38:5000';
+
 
 ReactDOM.render(
   <React.StrictMode>

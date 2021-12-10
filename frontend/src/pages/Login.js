@@ -2,15 +2,12 @@ import axios from "axios";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
 //This is the function that will be rendered.
-const Login = () =>
+const Login = ({setAuth}) =>
 {
-    const url = 'http://10.130.17.38:5000';
     const [log,setlog]=useState({
         mail:'',
         pass:'',
     });
-    const [err,seterr]=useState('')
-    //This will handle any input
     const Handleinput = (e) =>
     {
         const Name = e.target.name;
@@ -23,9 +20,13 @@ const Login = () =>
     {
         //CHECK Weather the user exist or not//BACKEND
 
-        axios.post(`${url}/api/auth/login`,log)
+        axios.post(`/api/auth/login`,log)
         .then((response)=>{
-            console.log(response);
+            const token = response.data.token;
+            setAuth(true);
+            localStorage.setItem("Authorization", `Bearer: ${token}`);
+        }).catch((err) => {
+            console.log(err);
         });   
         return false ;
     }
@@ -42,7 +43,7 @@ const Login = () =>
             };
             if(!valid)
             {
-            seterr('Incorrect Email  Or Password');
+            //seterr('Incorrect Email  Or Password');
             };
         }
         catch
@@ -52,43 +53,33 @@ const Login = () =>
     }
 return(
 <>
-
 <link rel="stylesheet" href="./styles/sign.css"></link>
-    <div style={{display: 'flex',  justifyContent:'center'}}>
-        <b>Lums Discussion Forum</b><br/><br/>
+    <div style={{  paddingTop: '50px',  display: 'flex',  justifyContent:'center', height:'100'}}>
         </div>
-        <div style={{display: 'flex',  justifyContent:'center',  height: '100vh'}}>
+        <div style={{display: 'flex',  justifyContent:'center',  height: '100%'}}>
         <form action="" onSubmit={HandleSubmit}>
-        {/*EMAIL */}
-        <b>LUMS Email:</b> 
-        <input type="text" required autoComplete="OFF" placeholder="2xxxxxxx@lums.edu.pk"  
+        <b>Email</b> 
+        <input type="text" required autoComplete="OFF" 
         value={log.mail}
         onChange ={Handleinput}
         name="mail" 
         />
         <br/>
-         {/*Password */}
-         <b>Password:      </b> 
-        <input type="password" required autoComplete="OFF" placeholder="password" 
+        <br/>
+         <b>Password</b> 
+        <input type="password" required autoComplete="OFF"
         value={log.pass}
         onChange ={Handleinput}
         name="pass"
         />
-        <div style={{color:"red", fontSize:12}} fonts>
-            {err}
-         </div>
-        <br/>
-        <Link to='/signup'>
-         <b>Create Account</b>
-         </Link>
          <br/>
- <button type="button" className="cancelbtn">Cancel</button>
-      <button type="submit" className="signupbtn">Log In</button>
+         <br/>
+      <button type="submit" className="loginbtn">Login</button>
+      <Link to='/signup' className="signuplink">Create Account</Link>
       </form>
       </div>
 
 
 </>
-)
-};
+)};
 export default Login;

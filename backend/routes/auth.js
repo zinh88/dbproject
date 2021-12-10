@@ -53,7 +53,7 @@ router.post('/signup', validInfo ,async (req, res) => {
         )
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error');
     }
 });
 
@@ -96,11 +96,12 @@ router.get('/confirm', async (req, res) => {
                 const name = decoded.name;
                 const loginurl = `http://${hostIP}:${clientPort}/login`
     
-                pool.query(`INSERT INTO members VALUES (DEFAULT, $1, $2, $3)`, 
-                [email, hashedpassword, name],
-                (error, _) => {
-                    if(error) res.status(401).send(`Registration Failed`);
-                    else res.send(`Registration Successful, go to <a href="${loginurl}">Login page</a> `)
+                pool.query(
+                    `INSERT INTO members VALUES (DEFAULT, $1, $2, $3, 'NO IMAGE', 'EMPTY')`, 
+                    [email, hashedpassword, name],
+                    (error, _) => {
+                        if(error) res.status(401).send(`Registration Failed`);
+                        else res.send(`Registration Successful, go to <a href="${loginurl}">Login page</a> `)
                 })
             }
         });
