@@ -22,9 +22,36 @@ CREATE TABLE posts (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE comments (
+    id BIGSERIAL PRIMARY KEY,
+    post_id BIGSERIAL NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
+    member_id SERIAL NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    comment TEXT NOT NULL,
+    parent_id BIGINT REFERENCES comments(id) ON DELETE CASCADE
+);
+
+SELECT * FROM comments WHERE parent_id IS NULL;
+
 CREATE TABLE votes (
     post_id BIGSERIAL NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
     member_id SERIAL NOT NULL REFERENCES members(id) ON DELETE CASCADE,
     vote BOOLEAN NOT NULL,
     PRIMARY KEY (post_id, member_id)
+);
+
+SELECT vote, COUNT(vote) FROM votes WHERE post_id = id GROUP BY vote;
+
+CREATE TABLE roles (
+    member_id SERIAL NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    member_role INT NOT NULL,
+    PRIMARY KEY (member_id)
+);
+
+CREATE TABLE bookmarks (
+    member_id SERIAL NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+    post_id BIGSERIAL NOT NULL REFERENCES posts(id) ON DELETE CASCADE
+);
+
+CREATE TABLE pinned (
+    post_id BIGSERIAL NOT NULL REFERENCES posts(id) ON DELETE CASCADE
 );

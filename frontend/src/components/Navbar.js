@@ -17,13 +17,11 @@ import defaultpic from '../assets/Untitled.png'
 const Navbar = ({isAuthenticated , setAuth}) => {
     const [name, setName] = useState('');
     const [pic, setPic] = useState('NO IMAGE');
-    const [loggedin, setLoggedin] = useState(isAuthenticated);
 
     const logOut = (e) => {
         e.preventDefault();
         localStorage.removeItem("Authorization");
         setAuth(false);
-        setLoggedin(false);
     }
 
     const getInfo = async () => {
@@ -36,18 +34,15 @@ const Navbar = ({isAuthenticated , setAuth}) => {
             console.log(response);
             setName(response.data.name);
             setPic(response.data.picture === 'NO IMAGE'? defaultpic : response.data.picture);
-            setAuth(true);
-            setLoggedin(true);
         })
         .catch((err) => {
             console.log(err)
-            setAuth(false)
-            setLoggedin(false);
         })
     }
 
     useEffect(() => {
-        getInfo();
+        if(isAuthenticated)
+            getInfo();
     });
 
     return (
@@ -55,7 +50,7 @@ const Navbar = ({isAuthenticated , setAuth}) => {
         <Nav>
             <NavItem>
             {
-            !loggedin ?
+            !isAuthenticated ?
             <NavLink to='/' activeStyle>
               Not Logged In
             </NavLink> :
@@ -71,7 +66,7 @@ const Navbar = ({isAuthenticated , setAuth}) => {
             <NavItem>
             
             {
-            loggedin ? 
+            isAuthenticated ? 
             <NavMenu>
             <NavLink to='/'>
                 Profile

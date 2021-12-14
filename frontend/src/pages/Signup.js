@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import {Link} from 'react-router-dom';
 import './styles/signup.css';
+import { MessageBox } from "./styles/CreatePost.styled";
 //This Function WIll be returned/rendered From the file whenever, it is routed
 const Signup =() =>{
 //This call will contain information of the users when they signup
@@ -13,11 +14,7 @@ rpsd:'',
 });
 
 //This Class will contain eror message which will be desplayed when occured
-const [err,seterr]=useState({
-perr:'',
-mailerr:'',
-pres:''
-});
+
   
 const [message, setMessage] = useState('');
 
@@ -29,20 +26,15 @@ setreginfo({...reginfo,[name]:value});
 };
 
 //Isvalidate This Function will check weather the input is correct or Not
-const isvalidate=(e)=>{
-    let perr='';
-    let mailerr='';
-    let pres='';
+const isvalidate=()=>{
     if(!reginfo.mail.includes("@lums.edu.pk"))
         {
-            mailerr="The email is not valid";
+            setMessage("Should be a LUMS email");
+            return false;
         }
     if(reginfo.pass!==reginfo.rpsd)
         {
-            perr="The password do not match";
-        }
-    if(mailerr || perr){
-            seterr({perr,mailerr,pres});
+            setMessage("The password do not match");
             return false;
         }
         return true;
@@ -53,13 +45,12 @@ const HandleSubmit = (e)=>{
     try{
         if(isvalidate(e))
         {
-            //Forward IT
-            let perr='CHECK EMAIL';
-            let mailerr='';
-            let pres='';
-            axios.post(`/api/auth/signup`,reginfo ).then((response)=>{
-                perr=response.data.message;
-                seterr({perr,mailerr,pres});
+            axios.post(`/api/auth/signup`,reginfo )
+            .then((res) => {
+                console.log(res.data.message);
+                setMessage(res.data.message);
+            }).catch((err)=> {
+                setMessage(err.response.data.message);
             })
         };
     }
@@ -123,8 +114,8 @@ return (
             <br/>
             <button type="submit" className="loginbtn">Sign Up</button>
             <Link to='/login' className="signuplink">Already Have An Account</Link>
+            {message !== '' && <MessageBox >{message}</MessageBox>}
         </form> 
-        <h1>{message}</h1>
     </div>
     </>
    

@@ -5,6 +5,7 @@ const app = express()
 
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
+const postRoute = require('./routes/posts');
 
 app.use(express.json());
 
@@ -14,6 +15,7 @@ app.use(cors({
 
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
+app.use('/api/posts', postRoute);
 
 app.listen(5000, () => {
     console.log('Server is Running')

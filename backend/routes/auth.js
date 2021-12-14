@@ -22,6 +22,14 @@ router.post('/signup', validInfo ,async (req, res) => {
     
         const salt = await bcrypt.genSalt();
         const hashedpass = await bcrypt.hash(pass, salt);
+
+        const user = await pool.query(
+            `SELECT * FROM members WHERE email= $1`,
+            [email]
+        );
+        if (user.rowCount !== 0) {
+            return res.status(401).json({ message: "Account Already Exists"});
+        } 
      
         const transporter = nodemailer.createTransport({
             service: "hotmail",
@@ -53,7 +61,7 @@ router.post('/signup', validInfo ,async (req, res) => {
         )
     } catch (err) {
         console.error(err.message);
-        res.status(500).send('Server Error');
+        res.status(500).json({message:'Server Error'});
     }
 });
 

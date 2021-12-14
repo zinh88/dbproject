@@ -2,6 +2,12 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: white;
+  height:100%;
+}
+
+* {
+  font-family: Roboto, sans-serif;
 }
 
 code {

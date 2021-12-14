@@ -100,7 +100,7 @@ export const DisplayPic = styled.div`
 
 export const NavLogo = styled(Link)`
   height: 100%;
-  font-family: "Fugaz One", cursive;
+  font-family: "Fugaz One";
   font-size: 200%;
   color: #fff;
   display: inline-block;
