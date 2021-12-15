@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { CreatePost, GlobalStyle, Input, Label, MessageBox, PostForm , PostLink, PostText, StyledSubmit, Waiting } from "./styles/CreatePost.styled";
+import { CreatePost, GlobalStyle, Input, Label, MessageBox, PostForm , PostLink, PostText, StyledSubmit } from "./styles/CreatePost.styled";
 import { Wrapper } from "./styles/Wrapper.styled";
 
 

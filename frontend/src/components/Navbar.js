@@ -17,6 +17,7 @@ import defaultpic from '../assets/Untitled.png'
 const Navbar = ({isAuthenticated , setAuth}) => {
     const [name, setName] = useState('');
     const [pic, setPic] = useState('NO IMAGE');
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const logOut = (e) => {
         e.preventDefault();
@@ -34,6 +35,8 @@ const Navbar = ({isAuthenticated , setAuth}) => {
             console.log(response);
             setName(response.data.name);
             setPic(response.data.picture === 'NO IMAGE'? defaultpic : response.data.picture);
+            const role = response.data.role;
+            if (role === 2) setIsAdmin(true);
         })
         .catch((err) => {
             console.log(err)
@@ -51,10 +54,10 @@ const Navbar = ({isAuthenticated , setAuth}) => {
             <NavItem>
             {
             !isAuthenticated ?
-            <NavLink to='/' activeStyle>
+            <NavLink to='/'>
               Not Logged In
             </NavLink> :
-            <NavLink to='/' activeStyle>
+            <NavLink to='/'>
                 <DisplayPic pic={pic}/>
                 {name}
             </NavLink>
@@ -68,6 +71,10 @@ const Navbar = ({isAuthenticated , setAuth}) => {
             {
             isAuthenticated ? 
             <NavMenu>
+            {isAdmin && <NavLink to='/administrator'>Admin</NavLink>}
+            <NavLink to='/bookmarked'>
+                Bookmarked
+            </NavLink>
             <NavLink to='/'>
                 Profile
             </NavLink>

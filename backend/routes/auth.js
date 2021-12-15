@@ -1,12 +1,10 @@
 const pool = require('../config/db');
 const { Router } = require('express');
-const controller = require('../controllers/auth');
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 const validInfo = require('../middleware/validateinfo')
 require('dotenv').config();
-
 
 const router = Router();
 

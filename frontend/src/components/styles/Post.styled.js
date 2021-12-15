@@ -179,7 +179,17 @@ export const UserName = styled.div`
     display:flex;
     height:20px;
     font-size: 20px;
+    column-gap: 5px;
+    align-items: center;
 `
+export const UserRole = styled.div` 
+    font-family: Roboto, sans-serif;
+    color: #00ff00;
+    display:flex;
+    font-size: 15px;
+    font-weight: 900;
+`
+
 export const UserEmail = styled.div`
     display:flex;
     height:40%;
@@ -192,6 +202,7 @@ export const Bookmark = styled.div`
     background-color: ${({bookmarked}) => bookmarked? 'magenta':'transparent'};
     vertical-align: middle;
     border: 2px solid magenta;
+    cursor: pointer;
     :hover {
         background-color: ${({bookmarked}) => bookmarked? 'transparent':'magenta'};
     }
@@ -245,6 +256,7 @@ export const FooterBtn = styled.div`
     justify-content: center;
     align-items: center;
     text-align:center;
+    cursor: pointer;
     :hover {
         background-color: #dcdcdc;
         color: black;
@@ -271,4 +283,21 @@ export const Comments = styled(Link)`
         background-color: #dcdcdc;
         color: black;
     }
+`
+
+export const DeletedPost =styled.div`
+    display:flex;
+    height: 100px;
+    width: 100%;
+    min-width: 100px;
+    background-color: black;
+    border-radius: 10px;
+    padding: 0px;
+    overflow: hidden;
+    margin : 2px 0px 2px 0px;
+    font-size: xx-large;
+    font-weight: 900;
+    align-items: center;
+    justify-content: center;
+    color:white;
 `

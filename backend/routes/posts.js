@@ -25,7 +25,6 @@ router.post('/create', validInfo, async (req, res)=> {
             `INSERT INTO posts VALUES (DEFAULT, $1, $2, $3, $4) RETURNING id`,
             [id, title, text, pic]
         );
-        console.log(post);
         const post_id = post.rows[0].id;
         res.json({ 
             message: "Post Successful",
@@ -38,7 +37,7 @@ router.post('/create', validInfo, async (req, res)=> {
     }
 });
 
-router.get('/:id', validInfo, async (req, res)=> {
+router.get('/post/:id', validInfo, async (req, res)=> {
     const user_id = req.userid;
     const post_id = req.params.id;
 
@@ -49,13 +48,8 @@ router.get('/:id', validInfo, async (req, res)=> {
         if (response.rowCount === 0) {
             return res.status(404).json({ message: "Post Not Found" })
         }
-        const post = response.rows[0];
-        //const postObject = generatePost(user_id, post);
-        //console.log(await getVotes(post.id));
-        const date = new Date(post.created_at);
-        console.log(date)
-        console.log(makeDate(date))
-        //res.json(postObject);
+        const postObject = await generatePost(user_id, post_id);
+        res.json(postObject);
         
     } catch(err) {
         console.log(err);
@@ -63,39 +57,225 @@ router.get('/:id', validInfo, async (req, res)=> {
     }
 });
 
-const samplepost = {
-    id: 2,
-    pinned: true,
-    title:`Sneed's Feed And Seed`,
-    body: `The joke is that the place is called "Sneed's Feed & Seed" which is clever in itself and quite funny to those with a mature sense of humour but what's really just hilarious about it is that if you look closely at the front of this store, Sneed's Feed & Seed, you can see a line that reads "Formerly Chuck's". Now, this might go over the average viewer's head as this, THIS, is peak comedy. I doubt anything will ever be as funny as the joke about Sneed's Feed & Seed. Are you ready for this one? So, like I said, the place is called "Sneed's Feed & Seed" and this sign says "Formerly Chuck's", which means that when Chuck owned the place, well, I don't have to tell you...`,
-    postpic: `https://res.cloudinary.com/dni1yyfcc/image/upload/v1638831959/LDF/profile_pics/dkso80tie7381_hiyduk.png`,
-    upvotes: 90,
-    downvotes: 20,
-    username: 'Zain',
-    useremail: '23100008@lums.edu.pk',
-    userpic: 'NO IMAGE',
-    uservote: 1,
-    comments: 29,
-    bookmarked: false,
-    ismod:false,
-    isop:false,
-    date: {
-        day: 23,
-        month: 'Dec',
-        year: 2021,
-        time: '12:30 PM'
+router.get('/popular/:page', validInfo, async (req, res) => {
+    try{
+        const page = req.params.page;
+        const user_id = req.userid;
+        const result = await pool.query(
+            `SELECT id FROM popular WHERE id NOT IN (SELECT * FROM pinned) ORDER BY votes DESC LIMIT $1 OFFSET $2`,
+            [page*10, (page-1)*10]
+        )
+        const more = !(result.rowCount < 10);
+        const postids = result.rows;
+        let posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
+        if(page === '1') {
+            const pinnedposts = await getPinned(user_id);
+            posts = [...pinnedposts, ...posts]
+        }
+        res.json({
+            posts: posts,
+            more: more
+        })
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: 'Server Error' })
     }
-}
-const test = {
-    id: '20',
-    member_id: 5,
-    title: 'I Hate DB',
-    body: 'i hate db',
-    picture: 'NO IMAGE',
-    created_at: '2021-12-14T09:05:43.506Z'
-  }
+})
 
-const generatePost = async (userid, post) => {
+router.get('/recent/:page', validInfo, async (req, res) => {
+    try{
+        const page = req.params.page;
+        const user_id = req.userid;
+        const result = await pool.query(
+            `SELECT id FROM posts WHERE id NOT IN (SELECT * FROM pinned) ORDER BY created_at DESC LIMIT $1 OFFSET $2`,
+            [page*10, (page-1)*10]
+        )
+        const more = !(result.rowCount < 10);
+        const postids = result.rows;
+        let posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
+        if(page === '1') {
+            console.log('getting PIED');
+            const pinnedposts = await getPinned(user_id);
+            posts = [...pinnedposts, ...posts]
+        }
+        console.log('here');
+        res.json({
+            posts: posts,
+            more: more
+        })
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: 'Server Error' })
+    }
+})
+
+router.post('/pin/:id', validInfo, async (req, res) => {
+    try {
+        const user_id = req.userid;
+        const post_id = req.params.id;
+        const role = await getRole(user_id);
+        if (!(role > 0)) {
+            return res.status(403).json({ message: "Unauthorized" });
+        }
+        if (!(await checkPinned(post_id))) {
+            pool.query(
+                `INSERT INTO pinned VALUES ($1)`,
+                [post_id]
+            );
+            return res.status(200).json({ message: "Pinned" });
+        } else {
+            pool.query( 
+                `DELETE FROM pinned WHERE post_id= $1`,
+                [post_id]
+            )
+            return res.status(200).json({ message: "UnPinned" });
+        }
+        
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Server Error" })
+    }
+});
+
+router.delete('/post/:id', validInfo, async (req, res) => {
+    try {
+        const user_id = req.userid;
+        const post_id = req.params.id;
+        const role = await getRole(user_id);
+        const isop = await checkOP(user_id, post_id);
+        if ( isop || role > 0) {
+            pool.query(
+                `DELETE FROM posts WHERE id = $1`,
+                [post_id]
+            );
+            res.status(200).json({message: "Post Deleted"});
+        } else {
+            return res.status(403).json({ message: "Unauthorized" });
+        }
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: "Server Error" });
+    }
+})
+
+router.post('/bookmark/:id', validInfo, async (req, res)=> {
+    try {
+        const user_id = req.userid;
+        const post_id = req.params.id;
+        const bookmark = req.body.bookmark;
+
+        const result = await pool.query( 
+            `SELECT * FROM bookmarks WHERE member_id= $1 AND post_id = $2`,
+            [user_id, post_id]
+        )
+        if (bookmark && result.rowCount === 0) {
+            await pool.query(
+                `INSERT INTO bookmarks VALUES ($1, $2)`,
+                [user_id, post_id]
+            )
+            return res.status(200).json({ message : 'Bookmarked' });
+        } else if (!bookmark && result.rowCount !== 0) {
+            await pool.query(
+                `DELETE FROM bookmarks WHERE member_id = $1 AND post_id = $2`,
+                [user_id, post_id]
+            )
+            return res.status(200).json({ message: 'Removed Bookmark' });
+        } else {
+            return res.status(200).json({ message: 'OK'});
+        }
+
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: "Server Error" })
+    }
+});
+
+router.get('/bookmarked', validInfo, async (req, res) => {
+    try{
+        const user_id = req.userid;
+        const result = await pool.query(
+            `SELECT post_id as id FROM bookmarks WHERE member_id = $1`,
+            [user_id]
+        )
+        const postids = result.rows;
+        const posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
+        res.json({
+            posts: posts
+        });
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: "Server Error" });
+    }
+})
+
+router.post('/vote/:id', validInfo, async (req, res) => {
+    try {
+        const postid = req.params.id;
+        const userid = req.userid;
+        const vote = req.body.vote;
+        const result = await pool.query(
+            `SELECT * FROM votes WHERE member_id = $1 AND post_id = $2`,
+            [userid, postid]
+        )
+        const voted = !(result.rowCount === 0);
+        const votevalue = vote  === 1 ? "true" : "false";
+        
+        const querystring = 
+        voted ? 
+        `UPDATE votes SET vote = ${votevalue} WHERE member_id = ${userid} AND post_id = ${postid}`
+        :
+        `INSERT INTO votes VALUES (${postid}, ${userid}, ${votevalue})`;
+
+
+        if (vote > 1 || vote < -1) return res.status(400).json({ message: "Bad Request" })
+        if (vote === 1) {
+            pool.query(
+                querystring
+            )
+        } else if (vote === -1) {
+            pool.query(
+                querystring
+            )
+        } else if (vote === 0) {
+            pool.query(
+                `DELETE FROM votes WHERE member_id = $1 AND post_id = $2`,
+                [userid, postid]
+            )
+        }
+        return res.json({ message: "Voted" })
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: "Sever Error" })
+    }
+})
+
+const checkOP = async (userid, postid) => {
+    const result = await pool.query( 
+        `SELECT * FROM posts WHERE id = $1 AND member_id = $2`,
+        [postid, userid]
+    )
+    return result.rowCount !== 0;
+}
+
+const getPinned = async (userid) => {
+    const result = await pool.query(
+        `SELECT post_id AS id FROM pinned`
+    )
+    const postids = result.rows;
+    const pinnedposts = await Promise.all(postids.map(async ({ id }) => generatePost(userid, id)));
+    console.log(pinnedposts);
+    return pinnedposts;
+}
+
+const generatePost = async (userid, postid) => {
+    const response = await pool.query(
+        `SELECT * FROM posts WHERE id=${postid}`
+    )
+    if (response.rowCount === 0) {
+        return res.status(404).json({ message: "Post Not Found" })
+    }
+    const post = response.rows[0];
+
     const isop = userid === post.member_id;
     const id = post.id;
     const pinned = await checkPinned(id);
@@ -103,18 +283,61 @@ const generatePost = async (userid, post) => {
     const body = post.body;
     const postpic= post.picture;
     const { upvotes, downvotes } = await getVotes(id);
-    const { username, useremail, userpic } = await getUserView(userid, id);
-    const date = makeDate(post.created_at);
+    const { uservote, bookmarked } = await getUserView(userid, id);
+    const {  username, useremail, userpic } = await getOP(post.member_id);
+    const { day, month, year, time } = makeDate(post.created_at);
+    const oprole = await getRole(post.member_id);
+    const ismod = (await getRole(userid)) > 0;
+    const comments = await getNumComments(id);
 
+    return {
+        id: id,
+        pinned: pinned,
+        title: title,
+        body: body,
+        postpic: postpic,
+        upvotes: upvotes,
+        downvotes: downvotes,
+        username: username,
+        useremail: useremail,
+        userpic: userpic,
+        uservote: uservote,
+        comments: comments,
+        bookmarked: bookmarked,
+        ismod:ismod,
+        isop:isop,
+        oprole: oprole,
+        date: {
+            day: day,
+            month: month,
+            year: year,
+            time: time
+        }
+    }
 };
+
+const getOP = async (userid) => {
+    const result = await pool.query(
+        `SELECT * FROM members WHERE id = $1`,
+        [userid]
+    )
+    const user = result.rows[0];
+
+    return {
+        username: user.displayname,
+        useremail: user.email,
+        userpic: user.picture,
+    }
+}
 
 const checkPinned = async (postid) => {
     const response = await pool.query(
         `SELECT * FROM pinned WHERE post_id = $1`,
         [postid]
     )
-    return response.rowCount === 0;
+    return response.rowCount !== 0;
 }
+
 
 const getVotes = async (postid) => {
     const response = await pool.query(
@@ -130,18 +353,49 @@ const getVotes = async (postid) => {
     return ({ upvotes: upvotes, downvotes: downvotes});
 }
 
+const getRole = async (userid) => {
+    const result = await pool.query(
+        `SELECT member_role FROM roles WHERE member_id = $1`,
+        [userid]
+    );
+    if (result.rowCount === 0) return 0;
+    return result.rows[0].member_role;
+}
+
+
+
+const getNumComments = async (postid) => {
+    const result = await pool.query(
+        `SELECT count(id) FROM comments WHERE post_id = $1`,
+        [postid]
+    )
+    return Number(result.rows[0].count);
+}
+
 const getUserView = async (userid, postid) => {
     const result = await pool.query(
         `SELECT * FROM members WHERE id= $1`,
         [userid]
     );
     if(result.rowCount === 0) throw { message: 'Fatal Error' };
-    const user = result.rows[0];
+
+    let vote = 0;
+    const checkVote = await pool.query(
+        `SELECT vote FROM votes WHERE member_id = $1 AND post_id = $2`,
+        [userid, postid]
+    )
+    if(checkVote.rowCount !== 0) {
+        vote = checkVote.rows[0].vote ? 1 : -1;
+    }
+
+    const checkBookmark = await pool.query(
+        `SELECT * FROM bookmarks WHERE member_id = $1 AND post_id = $2`,
+        [userid, postid]
+    )
 
     return {
-        username: user.displayname,
-        useremail: user.email,
-        userpic: user.picture
+        uservote: vote,
+        bookmarked: checkBookmark.rowCount !== 0
     };
 }
 
@@ -169,8 +423,6 @@ const makeDate = (date) => {
         time: time
     }
 }
-
-
 
 
 module.exports = router;

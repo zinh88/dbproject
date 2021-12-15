@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { createGlobalStyle } from "styled-components";
+
+export const GlobalStyle = createGlobalStyle`
+    body {
+        background-color: pink;
+    }
+`
 
 export const FrontPage = styled.div` 
     padding-top: 50px;

@@ -28,38 +28,95 @@ import {
     DataSection,
     Comments,
     PinDisplay,
-    Pinned
+    Pinned,
+    UserRole,
+    DeletedPost
 } from "./styles/Post.styled";
 
 import defaultpic from '../assets/Untitled.png'
+import axios from "axios";
 
 
-const Post = ({ post: { id, title, body, pinned, postpic, upvotes, downvotes, username, useremail, userpic, uservote, comments, bookmarked, ismod, isop, date: { day, month, time } }}) => {
+const Post = ({ post: { id, title, body, pinned, postpic, upvotes, downvotes, username, useremail, userpic, uservote, comments, bookmarked, ismod, isop, oprole, date: { day, month, time } }}) => {
 
     const [vote, setVote] = useState(uservote);
     const [votes, setVotes] = useState(upvotes-downvotes);
     const [isBookmarked, setIsBookmarked] = useState(bookmarked);
+    const [ispinned, setPinned] = useState(pinned);
+    const [isdeleted, setDeleted] = useState(false);
 
     const displaypic = userpic === 'NO IMAGE'? defaultpic: userpic;
 
+    const votePost = (v) => {
+        axios.post(`/api/posts/vote/${id}`, {
+            vote: v
+        }, 
+        {
+            headers: {
+                'Authorization': localStorage.Authorization
+        }})
+        .then((resp) => console.log(resp))
+        .catch((err) => console.log(err))
+    }
+
     const clickUp = () => {
+        const newvote = vote === 1 ? 0 : 1;
         if (vote === 1){ setVote(0); setVotes(votes-1); }
         else if (vote === -1) { setVote(1); setVotes(votes+2);}
         else { setVote(1); setVotes(votes+1); }
+        votePost(newvote);
     }
 
     const clickDown = () => {
+        const newvote = vote === -1 ? 0 : -1;
         if (vote === -1) { setVote(0); setVotes(votes+1); }
         else if (vote === 1) { setVote(-1); setVotes(votes-2); }
         else { setVote(-1); setVotes(votes-1); }
+        votePost(newvote)
     }
 
     const bookmark = () => {
-        setIsBookmarked(!isBookmarked);
+        const b = !isBookmarked
+        setIsBookmarked(b);
+        axios.post(`/api/posts/bookmark/${id}`, { bookmark: b} , {
+            headers: {
+                'Authorization': localStorage.Authorization
+        }})
+        .then((res)=> { console.log(res) })
+        .catch((err)=> { console.log(err) })
     }
 
+    const pinPost = () => {
+        if (ispinned) {
+            setPinned(false);
+        } else {
+            setPinned(true);
+        }
+        axios.post(`/api/posts/pin/${id}`, {}, {
+            headers: {
+                'Authorization': localStorage.Authorization
+        }})
+        .then((res)=> { console.log(res)} )
+        .catch((err) => { console.log(err)} )
+    }
+
+    const deletePost = () => {
+        setDeleted(true);
+        axios.delete(`/api/posts/post/${id}`, {
+            headers: {
+                'Authorization': localStorage.Authorization
+        }})
+        .then((resp)=> { console.log(resp)})
+        .catch((err)=> { console.log(err)})
+    }
+
+
+
     return(
-        <StyledPost pinned={pinned} >
+        isdeleted ?
+        <DeletedPost>Post Deleted</DeletedPost> 
+        :
+        <StyledPost pinned={ispinned} >
             <SideBar>
                 <SideBarSection>
                     <DateDisplay>
@@ -77,7 +134,7 @@ const Post = ({ post: { id, title, body, pinned, postpic, upvotes, downvotes, us
                 </SideBarSection>
                 <SideBarSection>
                     <PinDisplay>
-                        <Pinned>{pinned? 'PINNED' : ''}</Pinned>
+                        <Pinned>{ispinned? 'PINNED' : ''}</Pinned>
                     </PinDisplay>
                 </SideBarSection>
             </SideBar>
@@ -87,7 +144,10 @@ const Post = ({ post: { id, title, body, pinned, postpic, upvotes, downvotes, us
                     <User> 
                         <ProfilePic pic={displaypic} />
                         <UserData>
-                            <UserName >{username}</UserName>
+                            <UserName >
+                                {username} 
+                                {!(oprole === 0) && <UserRole>{oprole === 1? '[Mod]': '[Admin]'}</UserRole>}
+                            </UserName>
                             <UserEmail >{useremail}</UserEmail>
                         </UserData>
                     </User>
@@ -101,7 +161,8 @@ const Post = ({ post: { id, title, body, pinned, postpic, upvotes, downvotes, us
             </DataSection>
             <PostFooter>
                     <Comments to={`/posts/${id}`}>{comments} Comments</Comments>
-                    <FooterBtn>Delete</FooterBtn>
+                    { (isop || ismod) && <FooterBtn onClick={deletePost}>Delete</FooterBtn> }
+                    { ismod && <FooterBtn onClick={pinPost}>{ispinned ?  'Unpin Post': 'Pin Post'}</FooterBtn>}     
                 </PostFooter>
             </PostData>
         </StyledPost>

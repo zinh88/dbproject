@@ -32,10 +32,8 @@ export const NavLink = styled(Link)`
   text-decoration: none;
   padding: 0 1rem;
   height: 100%;
+  font-weight : 900;
   cursor: pointer;
-  &.active {
-    color: #15cdfc;
-  }
 `;
 
 
@@ -53,6 +51,7 @@ export const NavMenu = styled.div`
 
 export const NavBtn = styled.nav`
   font-family: 'Roboto', sans-serif;
+  font-weight : 900;
   display: flex;
   align-items: center;
   margin-right: 10px;
@@ -68,6 +67,7 @@ export const NavBtnLink = styled(Link)`
   outline: none;
   border: none;
   cursor: pointer;
+  font-weight : 900;
   transition: all 0.2s ease-in-out;
   text-decoration: none;
   /* Second Nav */
@@ -78,6 +78,7 @@ export const NavBtn2 = styled.div`
   background: #fff;
   padding: 5px 22px;
   color: #000;
+  font-weight : 900;
   outline: none;
   border: none;
   cursor: pointer;
@@ -110,7 +111,4 @@ export const NavLogo = styled(Link)`
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  &.active {
-    color: #15cdfc;
-  }
 `;
