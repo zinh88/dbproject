@@ -7,7 +7,8 @@ const authRoute = require('./routes/auth');
 const userRoute = require('./routes/user');
 const postRoute = require('./routes/posts');
 const commentRoute = require('./routes/comments');
-const rolesRoute = require('./routes/roles')
+const rolesRoute = require('./routes/roles');
+const path = require('path');
 
 app.use(express.json());
 
