@@ -24,8 +24,8 @@ app.use('/api/roles', rolesRoute);
 
 //app.use(express.static(path.join(__dirname, '../frontend/public/build')));
 
-app.get('/*', function(_, res) {
-    res.sendFile(path.join(__dirname, '../frontend/public/build'), function(err) {
+app.get('*', function(_, res) {
+    res.sendFile(path.join(__dirname, '../frontend/public/build', 'index.html'), function(err) {
       if (err) {
         res.status(500).send(err)
       }
