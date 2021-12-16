@@ -8,7 +8,7 @@ const router = Router();
 
 router.get('/allusers', async (req, res) => {
     try {
-        const usernames = pool.query(
+        const usernames = await pool.query(
             `SELECT displayname AS name FROM members`
         )
         res.json({ users: usernames.rows })
