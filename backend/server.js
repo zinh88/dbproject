@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 
@@ -15,11 +16,14 @@ app.use(cors({
     origin: '*'
 }));
 
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/roles', rolesRoute);
+
 
 app.listen(5000, () => {
     console.log('Server is Running')
