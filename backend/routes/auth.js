@@ -98,7 +98,7 @@ router.get('/confirm', async (req, res) => {
                 const email = decoded.email;
                 const hashedpassword = decoded.hashedpassword;
                 const name = decoded.name;
-                const loginurl = `${hostAddress}}/login`
+                const loginurl = `${hostAddress}`
     
                 pool.query(
                     `INSERT INTO members VALUES (DEFAULT, $1, $2, $3, 'NO IMAGE', 'EMPTY')`, 
