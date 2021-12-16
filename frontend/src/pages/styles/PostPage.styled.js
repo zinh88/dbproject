@@ -1,7 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
 
-
 export const GlobalStyle = createGlobalStyle`
     body {
         background-color: pink;
@@ -37,7 +36,7 @@ export const CommentsWrapper = styled.div`
     padding: 10px;
     overflow: hidden;
     flex-direction: column;
-    row-gap: 10px;
+    row-gap: 5px;
 `
 
 export const CommentForm = styled.form` 

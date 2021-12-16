@@ -128,6 +128,7 @@ export const PostData = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    row-gap: 10px;
 `
 export const DataSection = styled.div ` 
     width: 100%;
@@ -210,7 +211,6 @@ export const Bookmark = styled.div`
 export const PostBody = styled.div`
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     row-gap: 5px;
     
 `
@@ -227,12 +227,11 @@ export const PostText = styled.div`
     display:flex;
     font-size: 15px;
 `
-export const PostImage = styled.div` 
+
+export const PostImage2 = styled.img` 
+    display: flex;
+    margin-bottom: 10px;
     width: 100%;
-    height: auto;
-    background-image: url(${({pic}) => pic});
-    background-size: cover;
-    background-position: center center; 
 `
 
 export const PostFooter = styled.div` 

@@ -54,6 +54,7 @@ export const MoreButton = styled.button`
     font-weight: 900;
     font-size: small;
     color:white;
+    margin-bottom: 10px;
     :hover {
         background-color: purple;
     }

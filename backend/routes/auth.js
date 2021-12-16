@@ -26,7 +26,7 @@ router.post('/signup', validInfo ,async (req, res) => {
             [email]
         );
         if (user.rowCount !== 0) {
-            return res.status(401).json({ message: "Account Already Exists"});
+            return res.status(400).json({ message: "Account Already Exists"});
         } 
      
         const transporter = nodemailer.createTransport({
@@ -75,12 +75,12 @@ router.post('/login', validInfo, async (req, res) => {
             [email]
         );
         if (user.rowCount === 0) {
-            return res.status(401).json({ message: 'User does not exist' });
+            return res.status(400).json({ message: 'User does not exist' });
         }
 
         const correctPassword = await bcrypt.compare(pass, user.rows[0].hashedpassword);
         if(!correctPassword) {
-            return res.status(401).json({ message: 'Incorrect Password'});
+            return res.status(400).json({ message: 'Incorrect Password'});
         }
         const token = jwt.sign({ user: user.rows[0].id }, process.env.JWT_SECRET);
         res.json({ token: token });

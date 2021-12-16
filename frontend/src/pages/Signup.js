@@ -47,7 +47,7 @@ const HandleSubmit = (e)=>{
         {
             axios.post(`/api/auth/signup`,reginfo )
             .then((res) => {
-                console.log(res.data.message);
+                console.log(res);
                 setMessage(res.data.message);
             }).catch((err)=> {
                 setMessage(err.response.data.message);

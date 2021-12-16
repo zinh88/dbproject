@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link } from 'react-router-dom';
+import { MessageBox } from "./styles/CreatePost.styled";
+
 //This is the function that will be rendered.
 const Login = ({setAuth}) =>
 {
@@ -8,6 +10,9 @@ const Login = ({setAuth}) =>
         mail:'',
         pass:'',
     });
+
+    const [message, setMessage] = useState('');
+
     const Handleinput = (e) =>
     {
         const Name = e.target.name;
@@ -25,8 +30,10 @@ const Login = ({setAuth}) =>
             const token = response.data.token;
             setAuth(true);
             localStorage.setItem("Authorization", `Bearer: ${token}`);
+            console.log('login')
         }).catch((err) => {
             console.log(err);
+            setMessage(err.response.data.message)
         });   
         return false ;
     }
@@ -76,7 +83,10 @@ return(
          <br/>
       <button type="submit" className="loginbtn">Login</button>
       <Link to='/signup' className="signuplink">Create Account</Link>
+      {message !== '' && <MessageBox>{message}</MessageBox>}
+
       </form>
+      
       </div>
 
 

@@ -16,7 +16,7 @@ import {
     PostBody,
     PostTitle,
     PostText,
-    PostImage,
+    PostImage2,
     PostFooter,
     FooterBtn,
     SideBar,
@@ -37,7 +37,7 @@ import defaultpic from '../assets/Untitled.png'
 import axios from "axios";
 
 
-const Post = ({ post: { id, title, body, pinned, postpic, upvotes, downvotes, username, useremail, userpic, uservote, comments, bookmarked, ismod, isop, oprole, date: { day, month, time } }}) => {
+const Post = ({ post: { id, title, body, haspic , pinned, postpic, upvotes, downvotes, username, useremail, userpic, uservote, comments, bookmarked, ismod, isop, oprole, date: { day, month, time } }}) => {
 
     const [vote, setVote] = useState(uservote);
     const [votes, setVotes] = useState(upvotes-downvotes);
@@ -156,7 +156,7 @@ const Post = ({ post: { id, title, body, pinned, postpic, upvotes, downvotes, us
                 <PostBody>
                     <PostTitle>{title}</PostTitle>
                     <PostText>{body === '' ? '(No Body)' : body}</PostText>
-                    <PostImage pic={postpic} />
+                    { haspic && <PostImage2 src={postpic} />}
                 </PostBody>
             </DataSection>
             <PostFooter>

@@ -75,7 +75,7 @@ const Navbar = ({isAuthenticated , setAuth}) => {
             <NavLink to='/bookmarked'>
                 Bookmarked
             </NavLink>
-            <NavLink to='/'>
+            <NavLink to='/profile'>
                 Profile
             </NavLink>
             <NavBtn>

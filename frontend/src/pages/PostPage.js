@@ -6,7 +6,6 @@ import axios from "axios";
 import { CommentForm, CommentHeader, CommentSubmit, CommentsWrapper, CommentText, GlobalStyle, MoreComments, PostWrapper } from "./styles/PostPage.styled";
 import Comment from "../components/Comment";
 
-
 const PostPage = () => {
     const [post , setPost] = useState();
     const [commenttext, setCommenttext] = useState('');
@@ -86,7 +85,6 @@ const PostPage = () => {
             </ PostWrapper >
         </Wrapper>
         </>
-
     )
 }
 

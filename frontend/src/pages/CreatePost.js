@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { CreatePost, GlobalStyle, Input, Label, MessageBox, PostForm , PostLink, PostText, StyledSubmit } from "./styles/CreatePost.styled";
 import { Wrapper } from "./styles/Wrapper.styled";
 
-
 const CreatePage = () => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");

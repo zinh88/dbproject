@@ -23,7 +23,7 @@ const Feed = () => {
             if( p === 1 )
                 setPosts([...newposts]);
             else 
-                setPosts([...posts, newposts]);
+                setPosts([...posts, ...newposts]);
             setMore(more);
             setPage(page+1);
         })
@@ -56,7 +56,7 @@ const Feed = () => {
                     <Post post={post} key={index} />
                 )
             }
-            {more && <MoreButton>Show More</MoreButton>}
+            {more && <MoreButton onClick={() => requestPosts(page,ordering)}>Show More</MoreButton>}
         </StyledFeed>
     )
 }

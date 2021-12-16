@@ -12,7 +12,7 @@ router.post('/create', validInfo, async (req, res)=> {
 
         const title = req.body.title;
         const text = req.body.body;
-        const pic = 'NO IMAGE';
+        let pic = 'NO IMAGE';
 
         if(req.body.hasPic) {
             const uploadResponse = await cloudinary.uploader.upload(
@@ -94,11 +94,9 @@ router.get('/recent/:page', validInfo, async (req, res) => {
         const postids = result.rows;
         let posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
         if(page === '1') {
-            console.log('getting PIED');
             const pinnedposts = await getPinned(user_id);
             posts = [...pinnedposts, ...posts]
         }
-        console.log('here');
         res.json({
             posts: posts,
             more: more
@@ -208,6 +206,24 @@ router.get('/bookmarked', validInfo, async (req, res) => {
     }
 })
 
+router.get('/own', validInfo, async (req, res) => {
+    try{
+        const user_id = req.userid;
+        const result = await pool.query(
+            `SELECT id FROM posts WHERE member_id = $1`,
+            [user_id]
+        )
+        const postids = result.rows;
+        const posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
+        res.json({
+            posts: posts
+        });
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ message: "Server Error" });
+    }
+})
+
 router.post('/vote/:id', validInfo, async (req, res) => {
     try {
         const postid = req.params.id;
@@ -263,7 +279,6 @@ const getPinned = async (userid) => {
     )
     const postids = result.rows;
     const pinnedposts = await Promise.all(postids.map(async ({ id }) => generatePost(userid, id)));
-    console.log(pinnedposts);
     return pinnedposts;
 }
 
@@ -289,6 +304,7 @@ const generatePost = async (userid, postid) => {
     const oprole = await getRole(post.member_id);
     const ismod = (await getRole(userid)) > 0;
     const comments = await getNumComments(id);
+    const haspic = postpic !== 'NO IMAGE';
 
     return {
         id: id,
@@ -307,6 +323,7 @@ const generatePost = async (userid, postid) => {
         ismod:ismod,
         isop:isop,
         oprole: oprole,
+        haspic: haspic,
         date: {
             day: day,
             month: month,

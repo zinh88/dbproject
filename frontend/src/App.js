@@ -6,6 +6,7 @@ import CreatePage from './pages/CreatePost'
 import PostPage from './pages/PostPage'
 import Bookmarks from './pages/Bookmarks'
 import Administrator from './pages/Administrator'
+import Profile from './pages/Profile'
 import './App.css'
 import { useEffect, useState } from 'react';
 import {BrowserRouter as Router , Route, Switch, Redirect } from 'react-router-dom';
@@ -50,6 +51,7 @@ const App = () => {
       <Route exact path="/posts/:id" render={props =>  isAuthenticated? <PostPage {...props} /> : <Redirect to='/login' setAuth={setAuth} /> } />
       <Route exact path="/bookmarked" render={props =>  isAuthenticated? <Bookmarks {...props} /> : <Redirect to='/login' setAuth={setAuth} /> } />
       <Route exact path="/administrator" render={props =>  isAuthenticated? <Administrator {...props} /> : <Redirect to='/login' setAuth={setAuth} /> } />
+      <Route exact path="/profile" render={props =>  isAuthenticated? <Profile {...props} /> : <Redirect to='/login' setAuth={setAuth} /> } />
     </Switch>
     
     </Router>

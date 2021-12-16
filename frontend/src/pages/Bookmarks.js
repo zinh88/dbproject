@@ -1,7 +1,7 @@
 import axios from "axios";
 import Post from "../components/Post";
 import { useEffect, useState } from "react";
-import { GlobalStyle , PostWrapper} from "./styles/Bookmarks.styled";
+import { BookmarkHeader, GlobalStyle , PostWrapper} from "./styles/Bookmarks.styled";
 import { Wrapper } from "./styles/Wrapper.styled";
 
 
@@ -19,11 +19,11 @@ const Bookmarks = () => {
         })
     },[])
 
-
     return (
         <>
         <GlobalStyle /> 
         <Wrapper>
+        <BookmarkHeader>You Have {bookmarkedposts.length} Bookmarks</BookmarkHeader>
         <PostWrapper>
             {
                 bookmarkedposts.map((post, i) =>

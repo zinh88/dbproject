@@ -45,9 +45,9 @@ export const LeftCol = styled.div`
     width: 200px;
     display: flex;
     flex-direction: column;
-    background-color: yellow;
     overflow: hidden;
-    @media screen and (max-width: 900px) {
+    margin-top: 5px;
+    @media screen and (max-width: 910px) {
         display: none;
     }
 `
@@ -60,8 +60,9 @@ export const CreateBox = styled.div`
     position: fixed;
     border-radius: 10px;
     padding: 10px;
-    margin: 3px 0 3px 3px;
+    margin: 3px 0px 0px 0px;
 `
+
 export const CreateBtn = styled(Link)` 
     width: 100%;
     height: 100%;
@@ -82,13 +83,19 @@ export const CreateBtn = styled(Link)`
     }
 `
 
-export const RightCol = styled.div` 
-    height: 1000px;
+export const RulesBox = styled.div` 
     width: 200px;
-    display:flex;
-    background-color: yellow;
-
-    @media screen and (max-width: 900px) {
-        display: none;
-    }
+    padding: 10px;
+    color: white;
+    background-color: black;
+    border-radius: 10px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+`
+export const RulesHeading = styled.div` 
+    display: flex;
+    font-size: xx-large;
+    font-weight: 900;
 `

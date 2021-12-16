@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateBox, CreateBtn, FrontPage, GlobalStyle, LeftCol } from './styles/FrontPage.styled';
+import { CreateBox, CreateBtn, FrontPage, GlobalStyle, LeftCol, RulesBox, RulesHeading } from './styles/FrontPage.styled';
 import Feed from '../components/Feed';
 
 const Front = () => {
@@ -13,7 +13,12 @@ const Front = () => {
                 </CreateBox>
             </LeftCol>
             <Feed />
-            <LeftCol></LeftCol>
+            <LeftCol>
+                <RulesBox>
+                    <RulesHeading>Rules:</RulesHeading>
+                    <>{'No Bully'}</>
+                </RulesBox>
+            </LeftCol>
         </FrontPage>
         </>
     )
