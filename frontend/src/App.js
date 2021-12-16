@@ -9,7 +9,7 @@ import Administrator from './pages/Administrator'
 import Profile from './pages/Profile'
 import './App.css'
 import { useEffect, useState } from 'react';
-import {HashRouter as Router , Route, Switch, Redirect } from 'react-router-dom';
+import {BrowserRouter as Router , Route, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios'
 
 
