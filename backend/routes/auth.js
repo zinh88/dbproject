@@ -45,7 +45,7 @@ router.post('/signup', validInfo ,async (req, res) => {
             { expiresIn: '1h' },
             (err, emailToken) => {
                 if (err) res.status(401).json({ message : "Registration Failed" })
-                const url = `${hostAddress}}/api/auth/confirm?token=${emailToken}`;
+                const url = `${hostAddress}/api/auth/confirm?token=${emailToken}`;
                 transporter.sendMail({
                     from: `"LDF" <${process.env.NODEMAILER_MAIL}>`,
                     to: `${email}`,
