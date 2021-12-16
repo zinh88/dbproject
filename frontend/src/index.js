@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://10.130.17.38:5000';
+axios.defaults.baseURL = 'https://lumsdiscussionforum.herokuapp.com';
 
 
 ReactDOM.render(
