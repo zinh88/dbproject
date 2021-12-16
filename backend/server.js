@@ -20,6 +20,9 @@ app.use('/api/user', userRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/roles', rolesRoute);
+app.get('/test', (req,res) => {
+    res.json({message: "testt"})
+})
 
 const port = process.env.PORT || 5000;
 
