@@ -9,7 +9,7 @@ const router = Router();
 router.get('/allusers', async (req, res) => {
     try {
         const usernames = await pool.query(
-            `SELECT displayname AS name FROM members`
+            `SELECT * FROM members`
         )
         res.json({ users: usernames.rows })
     } catch(err) {
