@@ -24,7 +24,7 @@ app.use('/api/roles', rolesRoute);
 
 //app.use(express.static(path.join(__dirname, '../frontend/public/build')));
 
-const publicPath = path.join(__dirname, '../frontend/public');
+const publicPath = path.join(__dirname, '../frontend/public/build');
 app.use(express.static(publicPath));
 app.use('*', express.static(publicPath));
 
