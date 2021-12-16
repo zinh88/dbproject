@@ -22,7 +22,7 @@ app.use('/api/posts', postRoute);
 app.use('/api/comments', commentRoute);
 app.use('/api/roles', rolesRoute);
 
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(express.static(path.join(__dirname, '../frontend/public/build')));
 
 const port = process.env.PORT || 5000;
 
