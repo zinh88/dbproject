@@ -24,13 +24,9 @@ app.use('/api/roles', rolesRoute);
 
 //app.use(express.static(path.join(__dirname, '../frontend/public/build')));
 
-app.get('*', function(_, res) {
-    res.sendFile(path.join(__dirname, '../frontend/public/build'), function(err) {
-      if (err) {
-        res.status(500).send(err)
-      }
-    })
-  })
+const publicPath = path.join(__dirname, '../frontend/public');
+app.use(express.static(publicPath));
+app.use('*', express.static(publicPath));
 
 const port = process.env.PORT || 5000;
 
