@@ -11,14 +11,14 @@ const commentRoute = require('./routes/comments');
 const rolesRoute = require('./routes/roles');
 const path = require('path');
 
+app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 app.use(express.json());
 
 app.use(cors({
     origin: '*'
 }));
-
-app.use(bodyParser.json({limit: '50mb', extended: true}))
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}))
 
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
