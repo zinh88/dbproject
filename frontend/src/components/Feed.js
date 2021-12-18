@@ -9,10 +9,10 @@ const Feed = () => {
     const [page, setPage] = useState(1);
     const [more, setMore] = useState(true);
 
-    const requestPosts = () => {
-        const order = ordering === 1 ? "popular": "recent";
-        console.log(`/api/posts/${order}/${page}`);
-        axios.get(`/api/posts/${order}/${page}`,{
+    const requestPosts = (p , o) => {
+        const order = o === 1 ? "popular": "recent";
+        console.log(`/api/posts/${order}/${p}`);
+        axios.get(`/api/posts/${order}/${p}`,{
             headers: {
                 'Authorization': localStorage.Authorization
         }})
@@ -20,12 +20,12 @@ const Feed = () => {
             const newposts = resp.data.posts;
             console.log(newposts)
             const more = resp.data.more;
-            if( page === 1 )
+            if( p === 1 )
                 setPosts([...newposts]);
             else 
                 setPosts([...posts, ...newposts]);
             setMore(more);
-            setPage(page+1);
+            setPage(p+1);
         })
         .catch((err) => {
             console.log(err);
@@ -37,11 +37,13 @@ const Feed = () => {
             setOrdering(o);
             setPage(1);
             setPosts([]);
-            //requestPosts(1, o);
+            requestPosts(1, o);
         }        
     }
 
-    useEffect(requestPosts, [posts, page, ordering]);
+    useEffect(() => {
+        requestPosts(page, ordering)
+    }, []);
 
     return (
         <StyledFeed>
