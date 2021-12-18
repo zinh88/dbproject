@@ -67,7 +67,6 @@ router.get('/popular/:page', validInfo, async (req, res) => {
         )
         const more = !(result.rowCount < 10);
         const postids = result.rows;
-        console.log(rows)
         let posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
         if(page === 1) {
             const pinnedposts = await getPinned(user_id);
