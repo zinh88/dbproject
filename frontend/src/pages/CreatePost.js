@@ -38,7 +38,6 @@ const CreatePage = () => {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
             setPreview(reader.result);
-            console.log(reader.result)
         };
     };
 

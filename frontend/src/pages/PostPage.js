@@ -12,7 +12,7 @@ const PostPage = () => {
     const [comments, setComments] = useState([]);
     const [more, setMore] = useState(true);
     const [cpage, setCPage] = useState(1);
-    const  { id } = useParams();
+    const { id } = useParams();
 
     const getComments = () => {
         axios.get(`/api/comments/post/${id}/${cpage}`, {
@@ -79,7 +79,7 @@ const PostPage = () => {
                         <CommentText name={"Comment"} placeholder="Write a Comment" rows={2} onChange={(e)=> { setCommenttext(e.target.value)}}></CommentText>
                         <CommentSubmit>Submit</CommentSubmit>
                     </CommentForm>
-                    { comments.map((comment, index) => <Comment postid={id} comment={comment} key={index} />)}
+                    {comments.map((comment, index) => <Comment postid={id} comment={comment} key={index} />)}
                     {more && <MoreComments onClick={getComments}>Show More Comments</MoreComments>}
                 </CommentsWrapper>
             </ PostWrapper >
