@@ -11,6 +11,7 @@ const Feed = () => {
 
     const requestPosts = () => {
         const order = ordering === 1 ? "popular": "recent";
+        console.log(`/api/posts/${order}/${page}`);
         axios.get(`/api/posts/${order}/${page}`,{
             headers: {
                 'Authorization': localStorage.Authorization
