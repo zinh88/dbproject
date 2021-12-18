@@ -59,16 +59,17 @@ router.get('/post/:id', validInfo, async (req, res)=> {
 
 router.get('/popular/:page', validInfo, async (req, res) => {
     try{
-        const page = req.params.page;
+        const page = Number(req.params.page);
         const user_id = req.userid;
         const result = await pool.query(
             `SELECT id FROM popular WHERE id NOT IN (SELECT * FROM pinned) ORDER BY votes DESC LIMIT $1 OFFSET $2`,
-            [page*10, (page-1)*10]
+            [10, (page-1)*10]
         )
         const more = !(result.rowCount < 10);
         const postids = result.rows;
+        console.log(rows)
         let posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
-        if(page === '1') {
+        if(page === 1) {
             const pinnedposts = await getPinned(user_id);
             posts = [...pinnedposts, ...posts]
         }
@@ -84,16 +85,16 @@ router.get('/popular/:page', validInfo, async (req, res) => {
 
 router.get('/recent/:page', validInfo, async (req, res) => {
     try{
-        const page = req.params.page;
+        const page = Number(req.params.page);
         const user_id = req.userid;
         const result = await pool.query(
             `SELECT id FROM posts WHERE id NOT IN (SELECT * FROM pinned) ORDER BY created_at DESC LIMIT $1 OFFSET $2`,
-            [page*10, (page-1)*10]
+            [10, (page-1)*10]
         )
         const more = !(result.rowCount < 10);
         const postids = result.rows;
         let posts = await Promise.all(postids.map( async ({ id }) => generatePost(user_id, id)));
-        if(page === '1') {
+        if(page === 1) {
             const pinnedposts = await getPinned(user_id);
             posts = [...pinnedposts, ...posts]
         }
