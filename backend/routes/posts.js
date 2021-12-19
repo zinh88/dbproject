@@ -1,12 +1,12 @@
 const pool = require('../config/db');
 const { Router } = require('express');
-const validInfo = require('../middleware/authorize')
+const authorize = require('../middleware/authorize')
 const { cloudinary } = require('../config/cloudinary')
 require('dotenv').config();
 
 const router = Router();
 
-router.post('/create', validInfo, async (req, res)=> {
+router.post('/create', authorize, async (req, res)=> {
     try {
         const id = req.userid;
 
@@ -37,7 +37,7 @@ router.post('/create', validInfo, async (req, res)=> {
     }
 });
 
-router.get('/post/:id', validInfo, async (req, res)=> {
+router.get('/post/:id', authorize, async (req, res)=> {
     const user_id = req.userid;
     const post_id = req.params.id;
 
@@ -57,7 +57,7 @@ router.get('/post/:id', validInfo, async (req, res)=> {
     }
 });
 
-router.get('/popular/:page', validInfo, async (req, res) => {
+router.get('/popular/:page', authorize, async (req, res) => {
     try{
         const page = Number(req.params.page);
         const user_id = req.userid;
@@ -82,7 +82,7 @@ router.get('/popular/:page', validInfo, async (req, res) => {
     }
 })
 
-router.get('/recent/:page', validInfo, async (req, res) => {
+router.get('/recent/:page', authorize, async (req, res) => {
     try{
         const page = Number(req.params.page);
         const user_id = req.userid;
@@ -107,7 +107,7 @@ router.get('/recent/:page', validInfo, async (req, res) => {
     }
 })
 
-router.post('/pin/:id', validInfo, async (req, res) => {
+router.post('/pin/:id', authorize, async (req, res) => {
     try {
         const user_id = req.userid;
         const post_id = req.params.id;
@@ -135,7 +135,7 @@ router.post('/pin/:id', validInfo, async (req, res) => {
     }
 });
 
-router.delete('/post/:id', validInfo, async (req, res) => {
+router.delete('/post/:id', authorize, async (req, res) => {
     try {
         const user_id = req.userid;
         const post_id = req.params.id;
@@ -156,7 +156,7 @@ router.delete('/post/:id', validInfo, async (req, res) => {
     }
 })
 
-router.post('/bookmark/:id', validInfo, async (req, res)=> {
+router.post('/bookmark/:id', authorize, async (req, res)=> {
     try {
         const user_id = req.userid;
         const post_id = req.params.id;
@@ -188,7 +188,7 @@ router.post('/bookmark/:id', validInfo, async (req, res)=> {
     }
 });
 
-router.get('/bookmarked', validInfo, async (req, res) => {
+router.get('/bookmarked', authorize, async (req, res) => {
     try{
         const user_id = req.userid;
         const result = await pool.query(
@@ -206,7 +206,7 @@ router.get('/bookmarked', validInfo, async (req, res) => {
     }
 })
 
-router.get('/own', validInfo, async (req, res) => {
+router.get('/own', authorize, async (req, res) => {
     try{
         const user_id = req.userid;
         const result = await pool.query(
@@ -224,7 +224,7 @@ router.get('/own', validInfo, async (req, res) => {
     }
 })
 
-router.post('/vote/:id', validInfo, async (req, res) => {
+router.post('/vote/:id', authorize, async (req, res) => {
     try {
         const postid = req.params.id;
         const userid = req.userid;

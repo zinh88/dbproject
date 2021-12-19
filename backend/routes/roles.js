@@ -1,11 +1,11 @@
 const pool = require('../config/db');
 const { Router } = require('express');
-const validInfo = require('../middleware/authorize');
+const authorize = require('../middleware/authorize');
 require('dotenv').config();
 
 const router = Router();
 
-router.get('/mods', validInfo, async (req, res) => {
+router.get('/mods', authorize, async (req, res) => {
     try {
         const result = await pool.query(
             `SELECT id, displayname AS name , email FROM members NATURAL INNER JOIN roles WHERE id = member_id AND member_role = 1`
@@ -21,7 +21,7 @@ router.get('/mods', validInfo, async (req, res) => {
     }
 })
 
-router.post('/setmod', validInfo, async (req, res) => {
+router.post('/setmod', authorize, async (req, res) => {
     try {
         const id = req.userid;
         const reqrole = await getRole(id);
@@ -46,7 +46,7 @@ router.post('/setmod', validInfo, async (req, res) => {
     }
 })  
 
-router.delete('/mods/:id', validInfo, async (req, res) =>{
+router.delete('/mods/:id', authorize, async (req, res) =>{
     try{
         const id = req.params.id;
         await pool.query(

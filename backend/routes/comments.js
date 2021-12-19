@@ -1,11 +1,11 @@
 const pool = require('../config/db');
 const { Router } = require('express');
-const validInfo = require('../middleware/authorize')
+const authorize = require('../middleware/authorize')
 require('dotenv').config();
 
 const router = Router();
 
-router.get('/post/:id/:p', validInfo, async (req, res) => {
+router.get('/post/:id/:p', authorize, async (req, res) => {
     try {
         const userid = req.userid;
         const postid = req.params.id;
@@ -28,7 +28,7 @@ router.get('/post/:id/:p', validInfo, async (req, res) => {
     }
 });
 
-router.get('/comment/:id/:n', validInfo, async (req, res) => {
+router.get('/comment/:id/:n', authorize, async (req, res) => {
     try {
         const userid = req.userid;
         const commentid = req.params.id;
@@ -47,7 +47,7 @@ router.get('/comment/:id/:n', validInfo, async (req, res) => {
     }
 });
 
-router.post('/post/:id', validInfo, async (req, res) => {
+router.post('/post/:id', authorize, async (req, res) => {
     try {
         const userid = req.userid;
         const postid = req.params.id;
@@ -65,7 +65,7 @@ router.post('/post/:id', validInfo, async (req, res) => {
     }
 })
 
-router.post('/comment/:id', validInfo, async (req, res) => {
+router.post('/comment/:id', authorize, async (req, res) => {
     try {
         const userid = req.userid;
         const commentid = req.params.id;
@@ -84,7 +84,7 @@ router.post('/comment/:id', validInfo, async (req, res) => {
     }
 })
 
-router.delete('/delete/:id', validInfo, async (req, res)=> {
+router.delete('/delete/:id', authorize, async (req, res)=> {
     try {
         const id = req.params.id;
         await pool.query(

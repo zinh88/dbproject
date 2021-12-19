@@ -6,17 +6,6 @@ require('dotenv').config();
 
 const router = Router();
 
-router.get('/allusers', async (req, res) => {
-    try {
-        const usernames = await pool.query(
-            `SELECT * FROM members`
-        )
-        res.json({ users: usernames.rows })
-    } catch(err) {
-        res.status(500).json({ message: "Server Error" })
-    }
-})
-
 router.get('/info', authorize, async (req, res) => {
     try {
         const id = req.userid;
