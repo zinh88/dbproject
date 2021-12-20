@@ -93,7 +93,7 @@ router.get('/confirm', async (req, res) => {
     try {
         const token = req.query.token;
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            if (err) res.status(401).send(`Registration Failed`);
+            if (err) return res.status(401).send(`Registration Failed`);
             else {
                 const email = decoded.email;
                 const hashedpassword = decoded.hashedpassword;
@@ -104,7 +104,7 @@ router.get('/confirm', async (req, res) => {
                     `INSERT INTO members VALUES (DEFAULT, $1, $2, $3, 'NO IMAGE', 'EMPTY')`, 
                     [email, hashedpassword, name],
                     (error, _) => {
-                        if(error) res.status(401).send(`Registration Failed`);
+                        if(error) res.status(401).send(`Registration Failed!`);
                         else res.send(`Registration Successful, go to <a href="${loginurl}">Login page</a> `)
                 })
             }
