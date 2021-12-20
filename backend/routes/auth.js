@@ -42,9 +42,8 @@ router.post('/signup', validInfo ,async (req, res) => {
                 name: name
             },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' },
             (err, emailToken) => {
-                if (err) res.status(401).json({ message : "Registration Failed" })
+                if (err) return res.status(401).json({ message : "Registration Failed" })
                 const url = `${hostAddress}/api/auth/confirm?token=${emailToken}`;
                 transporter.sendMail({
                     from: `"LDF" <${process.env.NODEMAILER_MAIL}>`,
@@ -93,7 +92,10 @@ router.get('/confirm', async (req, res) => {
     try {
         const token = req.query.token;
         jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            if (err) return res.status(401).send(`Registration Failed`);
+            if (err) {
+                console.log(err);
+                return res.status(401).send(`Registration Failed`);
+            }
             else {
                 const email = decoded.email;
                 const hashedpassword = decoded.hashedpassword;
