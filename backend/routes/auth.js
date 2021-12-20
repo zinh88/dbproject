@@ -104,10 +104,14 @@ router.get('/confirm', async (req, res) => {
     
                 pool.query(
                     `INSERT INTO members VALUES (DEFAULT, $1, $2, $3, 'NO IMAGE', 'EMPTY')`, 
-                    [email, hashedpassword, name],
-                    (error, _) => {
-                        if(error) res.status(401).send(`Registration Failed!`);
-                        else res.send(`Registration Successful, go to <a href="${loginurl}">Login page</a> `)
+                    [email, hashedpassword, name]
+                )
+                .then(()=> {
+                    return res.send(`Registration Successful, go to <a href="${loginurl}">Login page</a> `)
+                })
+                .catch((err) => {
+                    console.log(err)
+                    return res.status(401).send(`Registration Failed!`);
                 })
             }
         });
