@@ -1,6 +1,8 @@
 # CS340 Fall 21' Project
 Deployed Link : https://lumsdiscussionforum.herokuapp.com
 
+<img width="1348" alt="Screenshot 2022-01-06 at 2 28 46 PM" src="https://user-images.githubusercontent.com/89087139/148360890-aa3aeaff-3b11-4623-86d7-1fc9d8c56b6d.png">
+
 ## Members
 * Muhammad Zain Khan
 * Basit Rahim
